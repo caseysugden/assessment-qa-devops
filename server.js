@@ -5,17 +5,41 @@ const {bots, playerRecord} = require('./data')
 const {shuffleArray} = require('./utils')
 
 app.use(express.json())
+
+let Rollbar = require('rollbar');
+let rollbar = new Rollbar({
+    accessToken: '8e3f3a1b682e432d9d4ae9865b8395a3',
+    captureUncaught: true,
+    captureUnhandledRejection: true
+});
 // app.use(express.static('public'))
 // app.use(express.static('public/js'))
 // app.use(express.static('public/styles'))
 // app.use("/",
 //     express.static(path.join(__dirname, "public"))
 // );
-app.use(express.static(path.join(__dirname, "public")))
+// app.use(express.static(path.join(__dirname, "public")))
+
+// Part 1 <
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/index.html'));
+});
+// app.get('/styles', (req, res) => {
+//     res.sendFile(path.join(__dirname, '/public/index.css'));
+// });
+app.use("/styles", express.static(path.join(__dirname, '/public/index.css')));
+app.use("/js", express.static(path.join(__dirname, '/public/index.js')));
+// app.get('/js', (req, res) => {
+//     res.sendFile(path.join(__dirname, '/public/index.js'));
+// });
+
+
+// Part 1 >
 
 app.get('/api/robots', (req, res) => {
     try {
-        res.status(200).send(botsArr)
+        rollbar.info('Hit draw endpoint')
+        res.status(200).send(bots)
     } catch (error) {
         console.log('ERROR GETTING BOTS', error)
         res.sendStatus(400)

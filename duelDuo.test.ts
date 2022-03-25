@@ -17,4 +17,19 @@ test('Title shows up when page loads', async () => {
     const title = await driver.findElement(By.id('title'))
     const displayed = await title.isDisplayed()
     expect(displayed).toBe(true)
+
+    // await driver.sleep(3000);
+})
+
+test('All bots appear when see all bots button is clicked', async () => {
+    let allBtn = await driver.findElement(By.id('see-all'));
+    await allBtn.click();
+
+    let displayedBots = await driver.findElement(By.xpath('(//div[@id="all-bots"]//div[@class="bot-card outline"])[1]'));
+    
+    const displayed = await displayedBots.isDisplayed();
+
+    expect(displayed).toBe(true);
+    
+    await driver.sleep(3000);
 })
